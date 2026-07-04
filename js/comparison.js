@@ -31,7 +31,7 @@ const Comparison = {
 |--------------------------------------------------------------------------
 */
 function comparisonRole() {
-  return typeof currentRole !== \"undefined\" ? currentRole : \"pencacah\";
+  return typeof currentRole !== "undefined" ? currentRole : "pencacah";
 }
 
 /*
@@ -51,17 +51,17 @@ function calcProgressFromRaw(user) {
   (user.regionSummary || []).forEach((region) => {
     (region.statusBreakdown || []).forEach((s) => {
       const c = Number(s.count) || 0;
-      if      (s.status === \"SUBMITTED BY Pencacah\")    submitted += c;
-      else if (s.status === \"APPROVED BY Pengawas\")     approved  += c;
-      else if (s.status === \"REJECTED BY Pengawas\")     rejected  += c;
-      else if (s.status === \"REVOKED BY Pengawas\")      revoked   += c;
-      else if (s.status === \"EDITED BY Admin Kabupaten\") edited   += c;
-      else if (s.status === \"EDITED BY Pengawas\")        edited   += c;
+      if      (s.status === "SUBMITTED BY Pencacah")    submitted += c;
+      else if (s.status === "APPROVED BY Pengawas")     approved  += c;
+      else if (s.status === "REJECTED BY Pengawas")     rejected  += c;
+      else if (s.status === "REVOKED BY Pengawas")      revoked   += c;
+      else if (s.status === "EDITED BY Admin Kabupaten") edited   += c;
+      else if (s.status === "EDITED BY Pengawas")        edited   += c;
     });
   });
 
   const numerator =
-    comparisonRole() === \"pengawas\"
+    comparisonRole() === "pengawas"
       ? approved + edited + rejected + revoked                  // progressReview
       : submitted + approved + edited + rejected + revoked;     // progressTotal
 
@@ -76,9 +76,9 @@ function calcProgressFromRaw(user) {
 function calcProgressFromProcessed(e) {
   if (!e) return 0;
   const val =
-    comparisonRole() === \"pengawas\"
-      ? (typeof e.progressReview === \"number\" ? e.progressReview : 0)
-      : (typeof e.progressTotal  === \"number\" ? e.progressTotal  : 0);
+    comparisonRole() === "pengawas"
+      ? (typeof e.progressReview === "number" ? e.progressReview : 0)
+      : (typeof e.progressTotal  === "number" ? e.progressTotal  : 0);
   return Number(val.toFixed(2));
 }
 
@@ -104,14 +104,14 @@ function aggregateRaw(rawArray) {
     (user.regionSummary || []).forEach((r) => {
       (r.statusBreakdown || []).forEach((s) => {
         const c = Number(s.count) || 0;
-        if      (s.status === \"OPEN\")                      sum.open      += c;
-        else if (s.status === \"DRAFT\")                     sum.draft     += c;
-        else if (s.status === \"SUBMITTED BY Pencacah\")     sum.submitted += c;
-        else if (s.status === \"APPROVED BY Pengawas\")      sum.approved  += c;
-        else if (s.status === \"REJECTED BY Pengawas\")      sum.rejected  += c;
-        else if (s.status === \"REVOKED BY Pengawas\")       sum.revoked   += c;
-        else if (s.status === \"EDITED BY Admin Kabupaten\") sum.edited    += c;
-        else if (s.status === \"EDITED BY Pengawas\")        sum.edited    += c;
+        if      (s.status === "OPEN")                      sum.open      += c;
+        else if (s.status === "DRAFT")                     sum.draft     += c;
+        else if (s.status === "SUBMITTED BY Pencacah")     sum.submitted += c;
+        else if (s.status === "APPROVED BY Pengawas")      sum.approved  += c;
+        else if (s.status === "REJECTED BY Pengawas")      sum.rejected  += c;
+        else if (s.status === "REVOKED BY Pengawas")       sum.revoked   += c;
+        else if (s.status === "EDITED BY Admin Kabupaten") sum.edited    += c;
+        else if (s.status === "EDITED BY Pengawas")        sum.edited    += c;
       });
     });
   });
@@ -138,12 +138,12 @@ function aggregateRaw(rawArray) {
 async function loadPreviousDay(referenceDate) {
   try {
     const roleParam = comparisonRole();
-    let url = \"api/history.php?action=previous&role=\" + encodeURIComponent(roleParam);
+    let url = "api/history.php?action=previous&role=" + encodeURIComponent(roleParam);
     if (referenceDate && /^\d{4}-\d{2}-\d{2}$/.test(referenceDate)) {
-      url += \"&before=\" + encodeURIComponent(referenceDate);
+      url += "&before=" + encodeURIComponent(referenceDate);
     }
 
-    const res = await fetch(url, { cache: \"no-store\" });
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) {
       Comparison.available = false;
       Comparison.previousDate = null;
@@ -152,7 +152,7 @@ async function loadPreviousDay(referenceDate) {
     }
 
     const payload = await res.json();
-    if (payload.status !== \"ok\" || !Array.isArray(payload.data)) {
+    if (payload.status !== "ok" || !Array.isArray(payload.data)) {
       Comparison.available = false;
       Comparison.previousDate = null;
       Comparison.previousMap = {};
@@ -164,14 +164,14 @@ async function loadPreviousDay(referenceDate) {
     Comparison.previousSummary = aggregateRaw(payload.data);
 
     payload.data.forEach((user) => {
-      const key = (user.username || \"\").toLowerCase();
+      const key = (user.username || "").toLowerCase();
       if (!key) return;
       Comparison.previousMap[key] = calcProgressFromRaw(user);
     });
 
     Comparison.available = true;
   } catch (err) {
-    console.warn(\"[Comparison] Gagal memuat snapshot sebelumnya:\", err);
+    console.warn("[Comparison] Gagal memuat snapshot sebelumnya:", err);
     Comparison.available = false;
     Comparison.previousDate = null;
     Comparison.previousMap = {};
@@ -186,9 +186,9 @@ async function loadPreviousDay(referenceDate) {
 function buildComparisonItems() {
   Comparison.items = (Dashboard.enumerators || []).map((e) => {
     const today = calcProgressFromProcessed(e);
-    const key = (e.username || \"\").toLowerCase();
+    const key = (e.username || "").toLowerCase();
     const yesterday = Comparison.previousMap[key];
-    const hasYesterday = typeof yesterday === \"number\";
+    const hasYesterday = typeof yesterday === "number";
     const delta = hasYesterday ? Number((today - yesterday).toFixed(2)) : null;
     return {
       username: e.username,
@@ -201,7 +201,7 @@ function buildComparisonItems() {
   const matched = Comparison.items.filter((x) => x.delta !== null).length;
   console.log(
     `[Comparison] role=${comparisonRole()} today=${Comparison.items.length} | prev(${
-      Comparison.previousDate || \"-\"
+      Comparison.previousDate || "-"
     })=${Object.keys(Comparison.previousMap).length} | matched=${matched}`
   );
 }
@@ -212,26 +212,26 @@ function buildComparisonItems() {
 |--------------------------------------------------------------------------
 */
 function renderComparison() {
-  const root = document.getElementById(\"comparisonCards\");
+  const root = document.getElementById("comparisonCards");
   if (!root) return;
 
   buildComparisonItems();
 
-  const roleLabel = comparisonRole() === \"pengawas\" ? \"PML\" : \"PPL\";
+  const roleLabel = comparisonRole() === "pengawas" ? "PML" : "PPL";
 
-  const mainTitle = document.getElementById(\"comparisonMainTitle\");
+  const mainTitle = document.getElementById("comparisonMainTitle");
   if (mainTitle) mainTitle.textContent = `Perbandingan Harian ${roleLabel}`;
 
-  const sub = document.getElementById(\"comparisonSubtitle\");
+  const sub = document.getElementById("comparisonSubtitle");
   if (sub) {
     const matched = Comparison.items.filter((x) => x.delta !== null).length;
     if (Comparison.available && Comparison.previousDate) {
       sub.textContent = `Hari ini vs ${Comparison.previousDate} • ${matched} dari ${Comparison.items.length} ${roleLabel} cocok`;
-      sub.classList.remove(\"text-warning\");
+      sub.classList.remove("text-warning");
     } else {
       sub.textContent =
-        \"Belum ada snapshot hari sebelumnya — perbandingan akan muncul setelah snapshot tersimpan.\";
-      sub.classList.add(\"text-warning\");
+        "Belum ada snapshot hari sebelumnya — perbandingan akan muncul setelah snapshot tersimpan.";
+      sub.classList.add("text-warning");
     }
   }
 
@@ -246,41 +246,41 @@ function renderComparison() {
 
   root.innerHTML = `
     ${renderRankCard({
-      id: \"cmpTopHigh\",
-      icon: \"bi-arrow-up-circle-fill\",
-      iconColor: \"#ffffff\",
+      id: "cmpTopHigh",
+      icon: "bi-arrow-up-circle-fill",
+      iconColor: "#ffffff",
       title: `TOP 5 ${roleLabel} TERTINGGI`,
       list: topHigh,
-      mode: \"value\",
-      valueClass: \"value-white\",
+      mode: "value",
+      valueClass: "value-white",
     })}
     ${renderRankCard({
-      id: \"cmpTopLow\",
-      icon: \"bi-arrow-down-circle-fill\",
-      iconColor: \"#ffffff\",
+      id: "cmpTopLow",
+      icon: "bi-arrow-down-circle-fill",
+      iconColor: "#ffffff",
       title: `TOP 5 ${roleLabel} TERENDAH`,
       list: topLow,
-      mode: \"value\",
-      valueClass: \"value-white\",
+      mode: "value",
+      valueClass: "value-white",
     })}
     ${renderRankCard({
-      id: \"cmpTopGain\",
-      icon: \"bi-graph-up-arrow\",
-      iconColor: \"#3b82f6\",
-      title: \"TOP PENINGKATAN HARIAN\",
+      id: "cmpTopGain",
+      icon: "bi-graph-up-arrow",
+      iconColor: "#3b82f6",
+      title: "TOP PENINGKATAN HARIAN",
       list: topGain,
-      mode: \"delta\",
-      valueClass: \"value-green\",
+      mode: "delta",
+      valueClass: "value-green",
       empty: !Comparison.available,
     })}
     ${renderRankCard({
-      id: \"cmpTopLowGain\",
-      icon: \"bi-graph-down-arrow\",
-      iconColor: \"#ef4444\",
-      title: \"TOP PENINGKATAN TERENDAH\",
+      id: "cmpTopLowGain",
+      icon: "bi-graph-down-arrow",
+      iconColor: "#ef4444",
+      title: "TOP PENINGKATAN TERENDAH",
       list: topLowGain,
-      mode: \"delta\",
-      valueClass: \"value-green\",
+      mode: "delta",
+      valueClass: "value-green",
       empty: !Comparison.available,
     })}
   `;
@@ -292,55 +292,55 @@ function renderComparison() {
 |--------------------------------------------------------------------------
 */
 function renderRankCard({ id, icon, iconColor, title, list, mode, valueClass, empty }) {
-  let body = \"\";
+  let body = "";
 
   if (empty) {
-    body = `<div class=\"rank-empty\">Belum ada data pembanding</div>`;
+    body = `<div class="rank-empty">Belum ada data pembanding</div>`;
   } else if (!list.length) {
-    body = `<div class=\"rank-empty\">Tidak ada data</div>`;
+    body = `<div class="rank-empty">Tidak ada data</div>`;
   } else {
     body = list
       .map((row) => {
-        let valStr = \"\";
+        let valStr = "";
         let valCls = valueClass;
-        if (mode === \"value\") {
-          valStr = (row.today ?? 0).toFixed(2) + \"%\";
+        if (mode === "value") {
+          valStr = (row.today ?? 0).toFixed(2) + "%";
         } else {
           if (row.delta === null) {
-            valStr = \"-\";
-            valCls = \"value-mute\";
+            valStr = "-";
+            valCls = "value-mute";
           } else {
-            const sign = row.delta > 0 ? \"+\" : \"\";
-            valStr = sign + row.delta.toFixed(2) + \"%\";
-            if (row.delta < 0) valCls = \"value-red\";
-            else if (row.delta === 0) valCls = \"value-mute\";
-            else valCls = \"value-green\";
+            const sign = row.delta > 0 ? "+" : "";
+            valStr = sign + row.delta.toFixed(2) + "%";
+            if (row.delta < 0) valCls = "value-red";
+            else if (row.delta === 0) valCls = "value-mute";
+            else valCls = "value-green";
           }
         }
         return `
-          <div class=\"rank-row\">
-            <span class=\"rank-user\">${escapeHtml(row.username || \"-\")}</span>
-            <span class=\"rank-val ${valCls}\">${valStr}</span>
+          <div class="rank-row">
+            <span class="rank-user">${escapeHtml(row.username || "-")}</span>
+            <span class="rank-val ${valCls}">${valStr}</span>
           </div>
         `;
       })
-      .join(\"\");
+      .join("");
   }
 
   return `
-    <div class=\"rank-card\" id=\"${id}\">
-      <div class=\"rank-head\">
-        <i class=\"bi ${icon}\" style=\"color:${iconColor}\"></i>
-        <span class=\"rank-title\">${title}</span>
+    <div class="rank-card" id="${id}">
+      <div class="rank-head">
+        <i class="bi ${icon}" style="color:${iconColor}"></i>
+        <span class="rank-title">${title}</span>
       </div>
-      <div class=\"rank-body\">${body}</div>
+      <div class="rank-body">${body}</div>
     </div>
   `;
 }
 
 function escapeHtml(str) {
-  return String(str).replace(/[&<>\"']/g, (c) =>
-    ({ \"&\": \"&amp;\", \"<\": \"&lt;\", \">\": \"&gt;\", '\"': \"&quot;\", \"'\": \"&#39;\" }[c])
+  return String(str).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
   );
 }
 
@@ -351,8 +351,8 @@ function escapeHtml(str) {
 */
 async function autoSnapshotToday() {
   try {
-    await fetch(\"api/history.php?action=snapshot\", { method: \"POST\" });
+    await fetch("api/history.php?action=snapshot", { method: "POST" });
   } catch (e) {
-    console.warn(\"[Comparison] auto snapshot gagal:\", e);
+    console.warn("[Comparison] auto snapshot gagal:", e);
   }
 }
