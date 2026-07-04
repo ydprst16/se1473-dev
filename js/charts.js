@@ -5,7 +5,7 @@
 | Semua visualisasi ApexCharts (ROLE-AWARE)
 |
 | PERUBAHAN v2:
-|   1. Status donut sekarang 7 kategori (menambah \"Edited\").
+|   1. Status donut sekarang 7 kategori (menambah "Edited").
 |   2. Ranking chart & District chart menggunakan progressReview
 |      untuk role Pengawas, progressTotal untuk role Pencacah.
 |   3. Tooltip District menampilkan Edited.
@@ -20,22 +20,22 @@
 */
 window.Apex = {
   chart: {
-    background: \"transparent\",
-    foreColor: \"#cbd5e1\",
+    background: "transparent",
+    foreColor: "#cbd5e1",
     toolbar: { show: false },
-    fontFamily: \"Inter, sans-serif\",
+    fontFamily: "Inter, sans-serif",
   },
-  theme: { mode: \"dark\", palette: \"palette1\" },
-  grid: { borderColor: \"#1f2937\", strokeDashArray: 3 },
-  tooltip: { theme: \"dark\" },
-  legend: { labels: { colors: \"#cbd5e1\" } },
+  theme: { mode: "dark", palette: "palette1" },
+  grid: { borderColor: "#1f2937", strokeDashArray: 3 },
+  tooltip: { theme: "dark" },
+  legend: { labels: { colors: "#cbd5e1" } },
   xaxis: {
-    labels: { style: { colors: \"#cbd5e1\" } },
-    axisBorder: { color: \"#1f2937\" },
-    axisTicks: { color: \"#1f2937\" },
+    labels: { style: { colors: "#cbd5e1" } },
+    axisBorder: { color: "#1f2937" },
+    axisTicks: { color: "#1f2937" },
   },
-  yaxis: { labels: { style: { colors: \"#cbd5e1\" } } },
-  dataLabels: { style: { colors: [\"#ffffff\"] } },
+  yaxis: { labels: { style: { colors: "#cbd5e1" } } },
+  dataLabels: { style: { colors: ["#ffffff"] } },
 };
 
 let statusChart = null;
@@ -49,8 +49,8 @@ let distributionChart = null;
 |--------------------------------------------------------------------------
 */
 function chartProgressField(item) {
-  const role = typeof currentRole !== \"undefined\" ? currentRole : \"pencacah\";
-  return role === \"pengawas\"
+  const role = typeof currentRole !== "undefined" ? currentRole : "pencacah";
+  return role === "pengawas"
     ? (item.progressReview ?? 0)
     : (item.progressTotal ?? 0);
 }
@@ -85,15 +85,15 @@ function destroyCharts() {
 |--------------------------------------------------------------------------
 */
 function renderStatusChart() {
-  const el = document.querySelector(\"#statusChart\");
+  const el = document.querySelector("#statusChart");
   if (!el) return;
 
   statusChart = new ApexCharts(el, {
-    chart: { type: \"donut\", height: 360, toolbar: { show: false } },
-    labels: [\"Open\", \"Draft\", \"Submitted\", \"Approved\", \"Edited\", \"Rejected\", \"Revoked\"],
+    chart: { type: "donut", height: 360, toolbar: { show: false } },
+    labels: ["Open", "Draft", "Submitted", "Approved", "Edited", "Rejected", "Revoked"],
     series: Dashboard.status,
-    colors: [\"#64748b\", \"#94a3b8\", \"#f59e0b\", \"#22c55e\", \"#8b5cf6\", \"#ef4444\", \"#f97316\"],
-    legend: { position: \"bottom\" },
+    colors: ["#64748b", "#94a3b8", "#f59e0b", "#22c55e", "#8b5cf6", "#ef4444", "#f97316"],
+    legend: { position: "bottom" },
     dataLabels: { enabled: true },
     tooltip: {
       y: { formatter: (value) => formatNumber(value) },
@@ -108,27 +108,27 @@ function renderStatusChart() {
 |--------------------------------------------------------------------------
 */
 function renderRankingChart() {
-  const el = document.querySelector(\"#rankingChart\");
+  const el = document.querySelector("#rankingChart");
   if (!el) return;
 
   const data = Dashboard.rankings.topProgress;
 
   rankingChart = new ApexCharts(el, {
-    chart: { type: \"bar\", height: 430, toolbar: { show: false } },
+    chart: { type: "bar", height: 430, toolbar: { show: false } },
     plotOptions: { bar: { horizontal: true, borderRadius: 5 } },
     series: [
       {
-        name: \"Progress\",
+        name: "Progress",
         data: data.map((x) => chartProgressField(x)),  // role-aware
       },
     ],
     xaxis: { categories: data.map((x) => x.username) },
     dataLabels: {
       enabled: true,
-      formatter: (value) => value.toFixed(1) + \"%\",
+      formatter: (value) => value.toFixed(1) + "%",
     },
     tooltip: {
-      y: { formatter: (value) => value.toFixed(2) + \"%\" },
+      y: { formatter: (value) => value.toFixed(2) + "%" },
     },
   });
   rankingChart.render();
@@ -140,7 +140,7 @@ function renderRankingChart() {
 |--------------------------------------------------------------------------
 */
 function renderDistrictChart() {
-  const el = document.querySelector(\"#districtChart\");
+  const el = document.querySelector("#districtChart");
   if (!el) return;
 
   // Sort by field yang sesuai role
@@ -149,25 +149,25 @@ function renderDistrictChart() {
   );
 
   districtChart = new ApexCharts(el, {
-    chart: { type: \"bar\", height: 420, toolbar: { show: false } },
+    chart: { type: "bar", height: 420, toolbar: { show: false } },
     plotOptions: { bar: { horizontal: true, borderRadius: 5 } },
     series: [
       {
-        name: \"Progress\",
+        name: "Progress",
         data: data.map((item) => chartProgressField(item)),
       },
     ],
     xaxis: { categories: data.map((item) => item.name) },
     dataLabels: {
       enabled: true,
-      formatter: (value) => value.toFixed(1) + \"%\",
+      formatter: (value) => value.toFixed(1) + "%",
     },
     tooltip: {
       custom: function ({ dataPointIndex }) {
         const d = data[dataPointIndex];
         const prog = chartProgressField(d);
         return `
-          <div style=\"padding:8px 12px;\">
+          <div style="padding:8px 12px;">
             <b>${d.name}</b><br/>
             Assignment : ${formatNumber(d.assignment)}<br/>
             Approved   : ${formatNumber(d.approved)}<br/>
@@ -192,30 +192,30 @@ function renderDistrictChart() {
 |--------------------------------------------------------------------------
 */
 function renderDistributionChart() {
-  const el = document.querySelector(\"#distributionChart\");
+  const el = document.querySelector("#distributionChart");
   if (!el) return;
 
   const bucket = Dashboard.distribution;
   const roleLabel =
-    typeof currentRole !== \"undefined\" && currentRole === \"pengawas\"
-      ? \"Pengawas\"
-      : \"Enumerator\";
+    typeof currentRole !== "undefined" && currentRole === "pengawas"
+      ? "Pengawas"
+      : "Enumerator";
 
   distributionChart = new ApexCharts(el, {
-    chart: { type: \"bar\", height: 350, toolbar: { show: false } },
+    chart: { type: "bar", height: 350, toolbar: { show: false } },
     series: [
       {
         name: roleLabel,
         data: [
-          bucket[\"0-20\"], bucket[\"20-40\"], bucket[\"40-60\"],
-          bucket[\"60-80\"], bucket[\"80-100\"],
+          bucket["0-20"], bucket["20-40"], bucket["40-60"],
+          bucket["60-80"], bucket["80-100"],
         ],
       },
     ],
-    xaxis: { categories: [\"0-20%\", \"20-40%\", \"40-60%\", \"60-80%\", \"80-100%\"] },
+    xaxis: { categories: ["0-20%", "20-40%", "40-60%", "60-80%", "80-100%"] },
     dataLabels: { enabled: true },
     tooltip: {
-      y: { formatter: (value) => value + \" \" + roleLabel },
+      y: { formatter: (value) => value + " " + roleLabel },
     },
   });
   distributionChart.render();
@@ -227,37 +227,37 @@ function renderDistributionChart() {
 |--------------------------------------------------------------------------
 */
 function renderTopPerformer() {
-  const container = document.getElementById(\"topPerformer\");
+  const container = document.getElementById("topPerformer");
   if (!container) return;
-  renderPerformerList(container, Dashboard.rankings.topProgress, \"success\");
+  renderPerformerList(container, Dashboard.rankings.topProgress, "success");
 }
 
 function renderBottomPerformer() {
-  const container = document.getElementById(\"bottomPerformer\");
+  const container = document.getElementById("bottomPerformer");
   if (!container) return;
-  renderPerformerList(container, Dashboard.rankings.bottomProgress, \"danger\");
+  renderPerformerList(container, Dashboard.rankings.bottomProgress, "danger");
 }
 
-function renderPerformerList(container, data, color = \"primary\") {
+function renderPerformerList(container, data, color = "primary") {
   if (!data || data.length === 0) {
-    container.innerHTML = `<div class=\"text-muted text-center p-3\">Tidak ada data</div>`;
+    container.innerHTML = `<div class="text-muted text-center p-3">Tidak ada data</div>`;
     return;
   }
 
-  let html = \"\";
+  let html = "";
   data.forEach((item, index) => {
     const progress = chartProgressField(item);   // role-aware
     html += `
-      <div class=\"performer-item d-flex justify-content-between align-items-center p-2 border-bottom\">
+      <div class="performer-item d-flex justify-content-between align-items-center p-2 border-bottom">
         <div>
-          <div class=\"fw-bold\">${index + 1}. ${item.username}</div>
-          <small class=\"text-muted\">
+          <div class="fw-bold">${index + 1}. ${item.username}</div>
+          <small class="text-muted">
             Assignment : <b>${formatNumber(item.assignment)}</b> |
             Submitted : <b>${formatNumber(item.submitted)}</b> |
             Approved : <b>${formatNumber(item.approved)}</b>
           </small>
         </div>
-        <span class=\"badge bg-${color}\">${formatPercent(progress)}</span>
+        <span class="badge bg-${color}">${formatPercent(progress)}</span>
       </div>
     `;
   });
@@ -271,7 +271,7 @@ function renderPerformerList(container, data, color = \"primary\") {
 */
 function refreshCharts() { renderCharts(); }
 
-window.addEventListener(\"resize\", () => {
+window.addEventListener("resize", () => {
   if (statusChart)       statusChart.updateOptions({});
   if (rankingChart)      rankingChart.updateOptions({});
   if (districtChart)     districtChart.updateOptions({});
