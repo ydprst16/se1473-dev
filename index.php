@@ -1006,7 +1006,7 @@
                 <i class="bi bi-calendar3"></i>
                 <label for="viewDate" class="m-0 small text-secondary">Lihat:</label>
                 <select id="viewDate" class="form-select form-select-sm"
-                    style="width: 175px; background: var(--bg-2); color: var(--text); border:1px solid var(--border); text-align:center;">
+                    style="width: 175px; background: var(--bg-2); color: var(--text); border:1px solid var(--border); text-align:center; text-align-last:center;">
                     <option value="">— Data Terbaru —</option>
                 </select>
                 <button class="btn btn-sm btn-outline-light" id="btnViewLatest" title="Kembali ke data terbaru">
