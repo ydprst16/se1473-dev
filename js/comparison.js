@@ -328,14 +328,16 @@ function renderRankCard({ id, icon, iconColor, title, list, mode, valueClass, em
   }
 
   return `
-    <div class="rank-card" id="${id}">
-      <div class="rank-head">
-        <i class="bi ${icon}" style="color:${iconColor}"></i>
-        <span class="rank-title">${title}</span>
-      </div>
-      <div class="rank-body">${body}</div>
-    </div>
-  `;
+    <div class="col-lg-3 col-md-6">
+            <div class="cmp-card" id="${id}">
+                <div class="cmp-head">
+                    <i class="bi ${icon}" style="color:${iconColor}"></i>
+                    <span>${title}</span>
+                </div>
+                <div class="cmp-body">${body}</div>
+            </div>
+        </div>
+    `;
 }
 
 function escapeHtml(str) {
