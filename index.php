@@ -1006,7 +1006,7 @@
                 <i class="bi bi-calendar3"></i>
                 <label for="viewDate" class="m-0 small text-secondary">Lihat:</label>
                 <select id="viewDate" class="form-select form-select-sm"
-                    style="width: 200px; background: var(--bg-2); color: var(--text); border:1px solid var(--border);">
+                    style="width: 175px; background: var(--bg-2); color: var(--text); border:1px solid var(--border);">
                     <option value="">— Data Terbaru —</option>
                 </select>
                 <button class="btn btn-sm btn-outline-light" id="btnViewLatest" title="Kembali ke data terbaru">
@@ -1131,7 +1131,7 @@
                             <i class="bi bi-pie-chart-fill text-primary"></i>
                             Status Dokumen
                         </div>
-                        <span class="badge bg-primary">Live</span>
+                        <!-- <span class="badge bg-primary">Live</span> -->
                     </div>
                     <div class="chart-body">
                         <div id="statusChart" class="chart-box"></div>
@@ -1146,7 +1146,7 @@
                             <i class="bi bi-bar-chart-line-fill text-success"></i>
                             <span id="rankingTitle">Top Progress Pencacah</span>
                         </div>
-                        <span class="text-secondary small">Top 20</span>
+                        <span class="text-secondary small">Top 10</span>
                     </div>
                     <div class="chart-body">
                         <div id="rankingChart" class="chart-box"></div>
