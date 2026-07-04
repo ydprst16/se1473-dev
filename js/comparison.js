@@ -295,9 +295,9 @@ function renderRankCard({ id, icon, iconColor, title, list, mode, valueClass, em
   let body = "";
 
   if (empty) {
-    body = `<div class="rank-empty">Belum ada data pembanding</div>`;
+    body = `<div class="cmp-empty">Belum ada data pembanding</div>`;
   } else if (!list.length) {
-    body = `<div class="rank-empty">Tidak ada data</div>`;
+    body = `<div class="cmp-empty">Tidak ada data</div>`;
   } else {
     body = list
       .map((row) => {
@@ -318,9 +318,9 @@ function renderRankCard({ id, icon, iconColor, title, list, mode, valueClass, em
           }
         }
         return `
-          <div class="rank-row">
-            <span class="rank-user">${escapeHtml(row.username || "-")}</span>
-            <span class="rank-val ${valCls}">${valStr}</span>
+          <div class="cmp-row">
+            <span class="cmp-user">${escapeHtml(row.username || "-")}</span>
+            <span class="cmp-val ${valCls}">${valStr}</span>
           </div>
         `;
       })
