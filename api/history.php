@@ -1,4 +1,21 @@
 <?php
+// Mematikan output error HTML bawaan PHP
+ini_set('display_errors', 0);
+error_reporting(E_ALL);
+
+// Menangkap Fatal Error dan mengubahnya menjadi format JSON
+register_shutdown_function(function() {
+    $err = error_get_last();
+    if ($err && in_array($err['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        http_response_code(500);
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode([
+            'status' => 'error', 
+            'message' => 'PHP Fatal Error: ' . $err['message'] . ' in ' . basename($err['file']) . ' line ' . $err['line']
+        ]);
+        exit;
+    }
+});
 /*
 | SE Monitoring Center — api/history.php v4
 | - Support role: pencacah | pengawas
