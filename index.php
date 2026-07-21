@@ -470,6 +470,176 @@
         .modal-content .text-secondary {
             color: var(--text-mute) !important;
         }
+                .modal-content .text-secondary {
+            color: var(--text-mute) !important;
+        }
+
+        /* === Upload Modal (multi-file) === */
+        .drop-zone {
+            border: 2px dashed #334155;
+            border-radius: 12px;
+            padding: 22px 18px;
+            text-align: center;
+            transition: background-color .15s, border-color .15s;
+            cursor: pointer;
+            background: rgba(59, 130, 246, 0.03);
+        }
+        .drop-zone:hover,
+        .drop-zone.is-dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.10);
+        }
+        .drop-zone-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 6px;
+        }
+        .drop-zone-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .drop-zone-sub {
+            font-size: 0.82rem;
+            color: var(--text-mute);
+            margin-top: 4px;
+        }
+        .drop-zone code {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1px 6px;
+            border-radius: 4px;
+            color: var(--info);
+        }
+        [data-bs-theme="light"] .drop-zone {
+            border-color: #cbd5e1;
+            background: rgba(59, 130, 246, 0.04);
+        }
+        [data-bs-theme="light"] .drop-zone code {
+            background: rgba(0, 0, 0, 0.04);
+        }
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .file-list:empty::before {
+            content: "Belum ada file dipilih.";
+            color: var(--text-mute);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+        .file-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #1f2937;
+            border-radius: 10px;
+            padding: 8px 12px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-rows: auto auto;
+            column-gap: 10px;
+            row-gap: 4px;
+            align-items: center;
+        }
+        [data-bs-theme="light"] .file-item {
+            background: #f8fafc;
+            border-color: #e5e7eb;
+        }
+        .file-item .fi-status {
+            width: 22px;
+            text-align: center;
+            font-size: 1rem;
+            grid-row: 1 / span 2;
+        }
+        .file-item .fi-name {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .file-item .fi-meta {
+            grid-column: 2;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.72rem;
+            color: var(--text-mute);
+        }
+        .file-item .fi-actions {
+            grid-column: 3;
+            grid-row: 1 / span 2;
+            display: flex;
+            gap: 4px;
+        }
+        .file-item .fi-remove {
+            background: transparent;
+            border: 0;
+            color: var(--text-mute);
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .file-item .fi-remove:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
+        .file-item .fi-progress {
+            grid-column: 1 / -1;
+            height: 4px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .file-item .fi-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+            transition: width .2s ease;
+        }
+        .fi-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+        .fi-badge-pencacah { background: rgba(34,197,94,0.15); color: #22c55e; }
+        .fi-badge-pengawas { background: rgba(59,130,246,0.18); color: #60a5fa; }
+        .fi-badge-unknown  { background: rgba(148,163,184,0.15); color: #cbd5e1; }
+        .fi-badge-date {
+            background: rgba(6,182,212,0.15); color: #22d3ee;
+        }
+        .fi-badge-error {
+            background: rgba(239,68,68,0.15); color: #f87171;
+        }
+        .fi-error-msg {
+            grid-column: 1 / -1;
+            font-size: 0.72rem;
+            color: #f87171;
+            margin-top: 2px;
+        }
+
+        .pw-input-wrap { position: relative; }
+        .pw-input-wrap .form-control { padding-right: 44px; }
+        .pw-input-toggle {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: 0;
+            color: var(--text-mute);
+            padding: 6px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .pw-input-toggle:hover { color: var(--primary); }
+
+
 
         /* === Comparison Cards === */
         .cmp-section {
@@ -1357,61 +1527,69 @@
             <!-- UPLOAD MODAL -->
             <!-- ============================= -->
 
+            
             <div class="modal fade" id="uploadModal" tabindex="-1">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content">
 
                         <div class="modal-header">
-                            <h5 class="modal-title">Upload JSON</h5>
-                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                            <h5 class="modal-title">
+                                <i class="bi bi-cloud-upload"></i>
+                                Upload JSON <span class="badge bg-secondary ms-1" id="uploadCount">0</span>
+                            </h5>
+                            <button class="btn-close" data-bs-dismiss="modal" data-testid="upload-modal-close"></button>
                         </div>
 
                         <div class="modal-body">
 
-                            <!-- File JSON -->
-                            <label class="form-label small text-secondary mb-1">File JSON</label>
-                            <input type="file" id="jsonFile" accept=".json" class="form-control">
+                            <!-- Drop zone -->
+                            <div id="dropZone" class="drop-zone" data-testid="upload-dropzone">
+                                <i class="bi bi-cloud-upload drop-zone-icon"></i>
+                                <div class="drop-zone-title">Drag &amp; drop file <code>.json</code> di sini</div>
+                                <div class="drop-zone-sub">
+                                    atau
+                                    <button type="button" id="btnPickFiles" class="btn btn-sm btn-outline-primary ms-1" data-testid="upload-pick-files">
+                                        Pilih file
+                                    </button>
+                                    &nbsp;·&nbsp; max <span id="maxBatchLbl">20</span> file, 10 MB per file
+                                </div>
+                                <input type="file" id="jsonFile" accept=".json,application/json" class="d-none" multiple data-testid="upload-file-input">
+                            </div>
 
-                            <!-- Tanggal Snapshot -->
+                            <!-- File list -->
+                            <div id="fileList" class="file-list mt-3" data-testid="upload-file-list"></div>
+
+                            <!-- Password -->
                             <div class="mt-3">
-                                <label for="jsonDate" class="form-label small text-secondary mb-1">
-                                    Tanggal Snapshot
-                                    <span class="text-warning">(otomatis terisi dari nama file)</span>
+                                <label for="uploadPassword" class="form-label small text-secondary mb-1">
+                                    <i class="bi bi-shield-lock"></i> Password Upload
                                 </label>
-                                <input type="date" id="jsonDate" class="form-control">
+                                <div class="pw-input-wrap">
+                                    <input type="password" id="uploadPassword" class="form-control" placeholder="Masukkan password upload" autocomplete="current-password" data-testid="upload-password">
+                                    <button type="button" class="pw-input-toggle" id="btnTogglePw" data-testid="upload-toggle-pw">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
                             </div>
 
                             <!-- Info -->
                             <div class="mt-3">
                                 <small class="text-secondary d-block">
                                     <i class="bi bi-info-circle"></i>
-                                    Pilih <code>latest.json</code> hasil export FASIH.
-                                    Sistem akan auto-deteksi tanggal dari nama file
-                                    (format <code>..._YYYY-MM-DD.json</code>).
-                                </small>
-                                <small class="text-secondary d-block mt-2">
-                                    <i class="bi bi-check-circle text-success"></i>
-                                    Tanggal = hari ini &rarr; ganti data live + simpan snapshot
-                                </small>
-                                <small class="text-secondary d-block">
-                                    <i class="bi bi-archive text-info"></i>
-                                    Tanggal = lampau &rarr; hanya simpan sebagai snapshot
+                                    Role &amp; tanggal dideteksi otomatis dari isi &amp; nama file. Tanggal <b>hari ini</b> menjadi data live + snapshot; tanggal lampau hanya snapshot.
                                 </small>
                             </div>
-
-                            <!-- Daftar snapshot yang sudah ada 
-                            <div class="mt-3">
-                                <small class="text-secondary">
-                                    Snapshot tersimpan:
-                                    <span id="snapshotList" class="fw-semibold">memuat...</span>
-                                </small>
-                            </div> -->
 
                         </div>
 
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button id="btnUpload" class="btn btn-primary">Upload</button>
+                            <a href="audit.php" class="btn btn-outline-secondary me-auto" target="_blank" data-testid="upload-audit-link">
+                                <i class="bi bi-clipboard-data"></i> Audit Log
+                            </a>
+                            <button class="btn btn-secondary" data-bs-dismiss="modal" data-testid="upload-cancel">Batal</button>
+                            <button id="btnUpload" class="btn btn-primary" data-testid="upload-submit">
+                                <i class="bi bi-cloud-arrow-up"></i> Upload Semua
+                            </button>
                         </div>
 
                     </div>
@@ -1426,6 +1604,7 @@
                     SE2026 Monitoring Center
                     <br>
                     Powered by Bootstrap 5 • ApexCharts • Grid.js
+
                 </small>
             </footer>
 
