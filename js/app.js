@@ -1,10 +1,10 @@
 /*
 | SE Monitoring Center — app.js v5 (Pencacah + Pengawas)
 | PERUBAHAN v5:
-|   - Role Pengawas sekarang pakai progressReview
-|     (Approved + Edited + Rejected + Revoked) / Assignment
-|   - KPI card "Progress Approve" -> "Progress Review"
-|   - Comparison (kemarin vs hari ini) ikut pakai progressReview
+|    - Role Pengawas sekarang pakai progressReview
+|      (Approved + Edited + Rejected + Revoked) / Assignment
+|    - KPI card "Progress Approve" -> "Progress Review"
+|    - Comparison (kemarin vs hari ini) ikut pakai progressReview
 */
 
 document.addEventListener("DOMContentLoaded", init);
@@ -432,8 +432,6 @@ function bindEvents() {
   });
 
   const viewDateEl = document.getElementById("viewDate");
-  // Handler pemilihan tanggal ditangani oleh Flatpickr onChange
-  // di populateViewDateOptions(), jadi tidak perlu addEventListener di sini.
 
   const btnViewLatest = document.getElementById("btnViewLatest");
   if (btnViewLatest)
@@ -521,7 +519,6 @@ async function refreshSnapshotList() {
     }
   } catch { el.textContent = "(gagal memuat)"; }
 }
-
 
 /* =========================================================================
  * MULTI-FILE UPLOAD (v6)
@@ -878,8 +875,8 @@ async function handleUploadAll() {
   Swal.fire({
     icon: fail.length && !done.length ? "error" : (fail.length ? "warning" : "success"),
     title: fail.length && !done.length ? "Semua upload gagal"
-         : fail.length ? "Upload sebagian sukses"
-         : "Upload berhasil",
+          : fail.length ? "Upload sebagian sukses"
+          : "Upload berhasil",
     html,
     confirmButtonText: "OK",
   }).then(() => {
