@@ -468,7 +468,7 @@ function bindEvents() {
       }
     });
 
-    const btnOpen = document.getElementById("btnOpenUpload");
+  const btnOpen = document.getElementById("btnOpenUpload");
   if (btnOpen)
     btnOpen.addEventListener("click", async () => {
       resetUploadModal();
@@ -476,71 +476,6 @@ function bindEvents() {
     });
 
   bindMultiUpload();
-
-  const btnDark = document.getElementById("btnDarkMode");
-  if (btnDark)
-    btnDark.addEventListener("click", () => {
-      const html = document.documentElement;
-      const cur = html.getAttribute("data-bs-theme") || "dark";
-      const next = cur === "dark" ? "light" : "dark";
-
-      const pickedDate = (dateInput && dateInput.value) || todayYMD();
-      const today = todayYMD();
-      const isToday = pickedDate === today;
-      if (pickedDate > today) {
-        Swal.fire({ icon: "warning", title: "Tanggal tidak valid", text: "Tidak boleh masa depan." });
-        return;
-      }
-
-      try {
-        btnUpload.disabled = true;
-        btnUpload.innerHTML = "Mengunggah...";
-        let result;
-        if (isToday) {
-          const fd = new FormData();
-          fd.append("file", file);
-          const res = await fetch("api/history.php?action=upload-latest", { method: "POST", body: fd });
-          result = await res.json();
-          if (!res.ok || result.status !== "ok") throw new Error(result.message || `HTTP ${res.status}`);
-        } else {
-          const fd = new FormData();
-          fd.append("file", file);
-          fd.append("date", pickedDate);
-          const res = await fetch("api/history.php?action=upload", { method: "POST", body: fd });
-          result = await res.json();
-          if (!res.ok || result.status !== "ok") throw new Error(result.message || `HTTP ${res.status}`);
-        }
-
-        const detectedRole = result.role || currentRole;
-        const modalEl = document.getElementById("uploadModal");
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        if (modal) modal.hide();
-
-        showLoading();
-        if (detectedRole !== currentRole) currentRole = detectedRole;
-        if (isToday) {
-          viewedDate = null;
-          if (viewDateFp) viewDateFp.clear(false);
-          else {
-            const vde = document.getElementById("viewDate");
-            if (vde) vde.value = "";
-          }
-        }
-        applyRoleUI();
-        await loadByDate(viewedDate);
-        await populateViewDateOptions();
-        await renderAll();
-        hideLoading();
-        toast("success", isToday
-          ? `Upload sukses — ${detectedRole} hari ini (${pickedDate})`
-          : `Snapshot ${detectedRole} ${pickedDate} tersimpan`);
-      } catch (err) {
-        Swal.fire({ icon: "error", title: "Upload Gagal", text: err.message });
-      } finally {
-        btnUpload.disabled = false;
-        btnUpload.innerHTML = "Upload";
-      }
-    });
 
   const btnDark = document.getElementById("btnDarkMode");
   if (btnDark)
@@ -956,3 +891,4 @@ async function handleUploadAll() {
     }
   });
 }
+
