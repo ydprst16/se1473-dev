@@ -243,6 +243,11 @@ try {
             $r = sb_download($P['history_dir'] . $date . '.json');
             if ($r['status_code'] === 404 || $r['status_code'] === 400)
                 throw new Exception("Snapshot {$role}/{$date} tidak ditemukan", 404);
+            if ($r['status_code'] >= 400)
+                throw new Exception('Gagal ambil: ' . $r['body']);
+            header('Content-Type: application/json; charset=utf-8');
+            echo $r['body'];
+            break;
         }
 
         case 'list': {
