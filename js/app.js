@@ -167,7 +167,26 @@ async function renderAll() {
   if (typeof renderComparison === "function") renderComparison();
 }
 
+function applySavedTheme() {
+  const html = document.documentElement;
+  let theme = localStorage.getItem("theme");
+  if (!theme) {
+    const prefersDark = window.matchMedia
+      && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    theme = prefersDark ? "dark" : "light";
+  }
+  html.setAttribute("data-bs-theme", theme);
+
+  const btn = document.getElementById("btnDarkMode");
+  if (btn) {
+    btn.innerHTML = theme === "dark"
+      ? `<i class="bi bi-moon"></i>`
+      : `<i class="bi bi-sun"></i>`;
+  }
+}
+
 async function init() {
+  applySavedTheme();
   bindEvents();
   applyRoleUI();
   try {
@@ -476,14 +495,29 @@ function bindEvents() {
   bindMultiUpload();
 
   const btnDark = document.getElementById("btnDarkMode");
-  if (btnDark)
+  if (btnDark) {
     btnDark.addEventListener("click", () => {
       const html = document.documentElement;
-      const cur = html.getAttribute("data-bs-theme") || "dark";
+      const cur  = html.getAttribute("data-bs-theme") || "dark";
       const next = cur === "dark" ? "light" : "dark";
+
       html.setAttribute("data-bs-theme", next);
-      btnDark.innerHTML = next === "dark" ? `<i class="fa fa-moon"></i>` : `<i class="fa fa-sun"></i>`;
+      localStorage.setItem("theme", next);
+
+      btnDark.innerHTML = next === "dark"
+        ? `<i class="bi bi-moon"></i>`
+        : `<i class="bi bi-sun"></i>`;
+
+      // >>> Sync semua chart ApexCharts ikut tema
+      if (typeof window.onThemeChanged === "function") {
+        window.onThemeChanged();
+      }
+
+      // >>> Sync Tabulator theme (opsional, kalau kamu simpan instance-nya)
+      if (typeof gridTable !== "undefined" && gridTable && gridTable.redraw)      gridTable.redraw(true);
+      if (typeof gridDetail !== "undefined" && gridDetail && gridDetail.redraw)   gridDetail.redraw(true);
     });
+  }
 
   const btnFs = document.getElementById("btnFullscreen");
   if (btnFs)
